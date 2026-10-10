@@ -49,7 +49,3 @@ Recorrido de un movimiento: `VistaJuego` → `ControladorJuego` → `ModeloJuego
 (socket) → `FachadaJuegoRemota` de cada jugador → `ModeloJuego.estadoCambiado` → `notificarObservadores` →
 `VistaJuego.actualizar`.
 
-## Entregables
-
-Este repositorio contiene solo el código fuente. El archivo de StarUML (4+1 vistas, modelos de análisis y
-de diseño), el PDF de storyboards y el video se entregan por separado.
