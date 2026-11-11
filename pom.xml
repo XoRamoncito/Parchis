@@ -7,6 +7,17 @@
     <groupId>mx.itson</groupId>
     <artifactId>parchis</artifactId>
     <version>1.0-SNAPSHOT</version>
+    <packaging>pom</packaging>
+
+    <!-- Un módulo por componente de la vista de componentes, con el mismo nombre. -->
+    <modules>
+        <module>parchis-dtos</module>
+        <module>parchis-sala-api</module>
+        <module>parchis-sala-mock</module>
+        <module>parchis-comunicacion-api</module>
+        <module>parchis-comunicacion-eventos</module>
+        <module>parchis-presentacion</module>
+    </modules>
 
     <properties>
         <maven.compiler.source>17</maven.compiler.source>
@@ -14,13 +25,14 @@
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
     </properties>
 
-    <dependencies>
-        <dependency>
-            <groupId>org.junit.jupiter</groupId>
-            <artifactId>junit-jupiter</artifactId>
-            <version>5.13.4</version>
-            <scope>test</scope>
-        </dependency>
-    </dependencies>
-
+    <dependencyManagement>
+        <dependencies>
+            <dependency>
+                <groupId>org.junit.jupiter</groupId>
+                <artifactId>junit-jupiter</artifactId>
+                <version>5.13.4</version>
+                <scope>test</scope>
+            </dependency>
+        </dependencies>
+    </dependencyManagement>
 </project>
