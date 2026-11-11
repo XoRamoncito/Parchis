@@ -1,51 +1,45 @@
-# Parchís
+# Parchís en Red
 
-Evaluación en equipo de Arquitectura de Software (ITSON).
-Integrantes: Ramon Montoya Manjarrez (00000269974) y Gustavo Romero Gonzalez (00000270001).
+Arquitectura de Software (ITSON) · Equipo 3 · Ramon Montoya Manjarrez y Gustavo Romero Gonzalez
 
-Por ahora implementa el caso de uso **Ejercer turno** (lanzar dado, seleccionar ficha, mover ficha, tiro
-extra y paso de turno) con el patrón **MVC**, donde la vista **observa** al modelo. El modelo habla con el
-subsistema de reglas del juego a través de una **fachada**, de la que solo existe un **objeto mock**. Cada
-jugador corre en su propia ventana y se conecta por **sockets** a un servidor; lo que hace el jugador en
-turno aparece en la ventana del que espera.
+Unidad II, Hito 2A: el **CU-01 Registrarse en la sala** funcionando sobre los subsistemas mock, organizado en
+capas y en un módulo de Maven por componente, y el prototipo del estilo que nos tocó: **basado en eventos**.
 
 ## Cómo ejecutarlo
 
 Requiere Java 17 o superior.
 
-1. Servidor: doble clic en `ejecutar-servidor.bat` (o ejecutar `servidor.AppServidor` desde IntelliJ).
-2. Jugador 1: doble clic en `ejecutar-cliente.bat` (o `cliente.AppCliente`). Pide el nombre y la dirección
-   del servidor (`localhost` si es la misma computadora).
-3. Jugador 2: lo mismo, en la misma computadora o en otra. Desde otra computadora se escribe la IP de la
-   que tiene el servidor (las dos deben estar en la misma red y el puerto 5000 permitido en el firewall).
+- El CU-01: doble clic en `ejecutar-parchis.bat` (o correr `presentacion.AppParchis`).
+- El prototipo del estilo: en una computadora `ejecutar-prototipo.bat bus`; en cada computadora
+  `ejecutar-prototipo.bat <nombre> <ip-de-la-del-bus>` y escribir un mensaje. Le llega al otro como evento.
+- Pruebas: `mvn test`.
 
-La partida empieza al entrar el segundo jugador. El primero es rojo y el segundo azul.
-Cada partida necesita un servidor recién arrancado (no se maneja el abandono de un jugador).
+## El CU-01
 
-Pruebas: `mvn test` (19 pruebas de la fachada mock y del modelo).
+El jugador escribe su nombre, elige color y avatar, y presiona "Registrar perfil". Si todo está bien entra a la
+sala de espera y ve a los demás jugadores; ahí puede confirmar que está listo.
 
-## Reglas que aplica el mock
+| Flujo | Qué pasa |
+|---|---|
+| Normal | Queda registrado y entra a la sala de espera. Los demás lo ven llegar. |
+| A1 | El nombre está vacío, es muy largo o ya existe: se muestra el mensaje y no se registra. |
+| A2 | El color ya está ocupado: se muestra el mensaje y solo se dejan elegir los colores libres. |
+| A3 | La sala ya tiene 4 jugadores: se muestra el mensaje y no se registra. |
 
-- Todas las fichas empiezan en la base; se sale con un 5.
-- Dan otro tiro: sacar 6, capturar una ficha rival y meter una ficha a la meta. El tercer 6 seguido pierde el turno.
-- No se captura en las salidas ni en las casillas grises, ni a dos fichas del mismo color en la misma casilla.
-- Si solo hay una ficha que se puede mover, se mueve sola. Si no hay ninguna, el turno pasa.
-- El jugador en turno tiene 15 segundos para lanzar; si no, el dado se tira solo.
+## Componentes (un módulo de Maven cada uno)
 
-## Estructura
-
-| Paquete | Clases | Papel |
+| Módulo | Capa | Qué tiene |
 |---|---|---|
-| `cliente.vista` | `VistaJuego`, `PanelTablero`, `AvisoJuego` | Vista (objetos de presentación). Observa al modelo. |
-| `cliente.controlador` | `ControladorJuego` | Controlador: recibe las acciones de la vista y llama al modelo. |
-| `cliente.modelo` | `ModeloJuego`, `ObservadorJuego` | Modelo y sujeto del patrón observador. |
-| `cliente.red` | `FachadaJuegoRemota` | La fachada vista desde el cliente: reenvía por socket. |
-| `negocio` | `IFachadaJuego`, `FachadaJuegoMock`, `OyenteJuego`, `MovimientoInvalidoException` | Fachada del subsistema de reglas y su mock. |
-| `servidor` | `ServidorParchis`, `ManejadorCliente`, `AppServidor` | Acepta jugadores y difunde el estado. |
-| `comun` | `EstadoJuego`, `EstadoFicha`, `ColorJugador`, `Mensaje` | Lo que viaja por el socket. |
+| `parchis-presentacion` | Presentación | `FormRegistro` y `FormSala` (las pantallas del storyboard), `ControlSala`, el `main` y `FabricaSubsistemas`. |
+| `parchis-sala-api` | Negocio | Paquete de interfaces del subsistema Sala: `IFachadaSala`, `SalaException`, `ObservadorSala`. |
+| `parchis-sala-mock` | Negocio | `FachadaSalaMock`: la sala en memoria, con los flujos A1, A2 y A3. |
+| `parchis-comunicacion-api` | Negocio | Paquete de interfaces de comunicación: `IComunicacion`, `ReceptorMensajes`. |
+| `parchis-comunicacion-eventos` | Negocio | El estilo basado en eventos: `BusEventosRed`, `RelevoEventos` y el prototipo. |
+| `parchis-dtos` | Entre capas | `JugadorDTO`, `SalaDTO`, `MensajeDTO`, `ColorJugador`. |
 
-Recorrido de un movimiento: `VistaJuego` → `ControladorJuego` → `ModeloJuego` → `FachadaJuegoRemota` →
-(socket) → `ManejadorCliente` → `FachadaJuegoMock` → `ServidorParchis.estadoCambiado` → `difundir` →
-(socket) → `FachadaJuegoRemota` de cada jugador → `ModeloJuego.estadoCambiado` → `notificarObservadores` →
-`VistaJuego.actualizar`.
+Las pantallas y el control solo conocen las interfaces y los DTOs. La fábrica es la única que nombra al mock:
+para el Hito 2B se cambia `FabricaSubsistemas.USAR_MOCK`.
 
+El modelo de StarUML está en `modelo/`.
+
+El código de la Unidad I quedó en la etiqueta `unidad-1`.
