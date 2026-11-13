@@ -11,13 +11,20 @@
     </parent>
 
     <artifactId>parchis-sala-mock</artifactId>
-    <description>Subsistema Sala simulado en memoria (mock) para el Hito 2A.</description>
+    <description>Subsistema Sala simulado en memoria (mock) del Hito 2A. Pasa la misma prueba de contrato que el real.</description>
 
     <dependencies>
         <dependency>
             <groupId>mx.itson</groupId>
             <artifactId>parchis-sala-api</artifactId>
             <version>${project.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>mx.itson</groupId>
+            <artifactId>parchis-sala-api</artifactId>
+            <version>${project.version}</version>
+            <type>test-jar</type>
+            <scope>test</scope>
         </dependency>
         <dependency>
             <groupId>org.junit.jupiter</groupId>

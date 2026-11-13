@@ -15,7 +15,7 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 
 /**
  * El mismo escenario del CU-01 contra cualquier IFachadaSala (ejercicio 6).
- * Hoy lo cumple el mock; en el Hito 2B se hereda para probar el subsistema real.
+ * Lo cumplen el mock (Hito 2A) y el subsistema real FachadaSala (Hito 2B).
  */
 public abstract class ContratoFachadaSala {
 
