@@ -17,6 +17,7 @@
         <module>parchis-comunicacion-api</module>
         <module>parchis-comunicacion-eventos</module>
         <module>parchis-datos</module>
+        <module>parchis-perfiles</module>
         <module>parchis-presentacion</module>
     </modules>
 
