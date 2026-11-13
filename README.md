@@ -20,8 +20,8 @@ Requiere Java 17 o superior, MySQL 8 y Maven (el que trae NetBeans sirve).
 
 - El prototipo del estilo (Hito 2A): `ejecutar-prototipo.bat bus` en una computadora y
   `ejecutar-prototipo.bat <nombre> <ip-del-bus>` en cada una.
-- Pruebas: `mvn test`. Incluyen la prueba de contrato contra el mock y contra el subsistema real, y pruebas con dos
-  "computadoras" conectadas al bus.
+- Pruebas: `mvn test` (20 pruebas). Incluyen la prueba de contrato contra el mock y contra el subsistema real, pruebas con
+  dos "computadoras" conectadas al bus y pruebas de `PerfilBO` con `PerfilDAOMemoria`, sin MySQL.
 
 ## El CU-01
 
@@ -58,10 +58,11 @@ color al mismo tiempo, cada computadora podría ver un ganador distinto. Lo reso
 | `parchis-perfiles` | Negocio | Objeto de negocio `PerfilBO` (obtener o crear el perfil) y `NegocioException`. |
 | `parchis-comunicacion-api` | Negocio | Paquete de interfaces de comunicación: `IComunicacion`, `ReceptorMensajes`. |
 | `parchis-comunicacion-eventos` | Negocio | El estilo basado en eventos: `BusEventosRed`, `RelevoEventos` y el prototipo. |
-| `parchis-datos` | Datos | `IPerfilDAO`, `PerfilDAOMySQL` (todo el SQL), `PerfilEntidad`, `ConexionBD`, `PersistenciaException`. |
+| `parchis-datos` | Datos | `IPerfilDAO` (`guardar`, `buscarPorNombre`, `registrarPartida`), `PerfilDAOMySQL` (todo el SQL), `PerfilDAOMemoria` (para probar sin MySQL), `PerfilEntidad`, `ConexionBD`, `PersistenciaException`. |
 | `parchis-dtos` | Entre capas | `JugadorDTO`, `SalaDTO`, `PerfilDTO`, `MensajeDTO`, `ColorJugador`. |
 
 Las pantallas y el control solo conocen `IFachadaSala`, `ObservadorSala` y los DTOs. `FabricaSubsistemas` es la única
 clase que nombra implementaciones concretas.
 
-El modelo de StarUML está en `modelo/`. El código de la Unidad I quedó en la etiqueta `unidad-1`.
+El modelo de StarUML está en `modelo/ParchisEnRed_CU01_Equipo3.mdj` (análisis actualizado, diseño de cada subsistema con sus
+secuencias y la vista de componentes). El código de la Unidad I quedó en la etiqueta `unidad-1`.

@@ -3,7 +3,7 @@ package dtos;
 import java.io.Serializable;
 
 /**
- * Lo que viaja entre computadoras: un tipo (por ejemplo "JugadorUnido") y sus datos.
+ * Lo que viaja entre computadoras: un tipo (por ejemplo "SolicitudRegistro") y sus datos.
  * En el estilo basado en eventos es el evento; quien lo envía no sabe quién lo recibe.
  */
 public class MensajeDTO implements Serializable {
