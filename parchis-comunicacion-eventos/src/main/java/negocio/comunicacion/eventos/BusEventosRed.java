@@ -8,6 +8,7 @@ import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.io.UncheckedIOException;
+import java.net.ConnectException;
 import java.net.Socket;
 import java.util.List;
 import java.util.Map;
@@ -25,9 +26,21 @@ public class BusEventosRed implements IComunicacion {
     private ObjectOutputStream salida;
     private final Map<String, List<ReceptorMensajes>> receptores = new ConcurrentHashMap<>();
 
+    /**
+     * Se conecta al bus. Si el bus es esta misma computadora y todavía nadie lo
+     * abrió, lo abre aquí: así la primera computadora en entrar es la que tiene el bus.
+     */
     @Override
     public void conectar(String host, int puerto) throws IOException {
-        socket = new Socket(host, puerto);
+        try {
+            socket = new Socket(host, puerto);
+        } catch (ConnectException e) {
+            if (!esEstaComputadora(host)) {
+                throw e;
+            }
+            new RelevoEventos(puerto).iniciarEnSegundoPlano();
+            socket = new Socket(host, puerto);
+        }
         salida = new ObjectOutputStream(socket.getOutputStream());
         salida.flush();
         ObjectInputStream entrada = new ObjectInputStream(socket.getInputStream());
@@ -63,12 +76,20 @@ public class BusEventosRed implements IComunicacion {
         }
     }
 
+    private static boolean esEstaComputadora(String host) {
+        return host == null || host.isBlank() || host.equalsIgnoreCase("localhost") || host.startsWith("127.");
+    }
+
     private void escuchar(ObjectInputStream entrada) {
         try {
             while (true) {
                 MensajeDTO mensaje = (MensajeDTO) entrada.readObject();
                 for (ReceptorMensajes receptor : receptores.getOrDefault(mensaje.getTipo(), List.of())) {
-                    receptor.recibir(mensaje);
+                    try {
+                        receptor.recibir(mensaje);
+                    } catch (RuntimeException e) {
+                        System.err.println("Error al atender el evento " + mensaje + ": " + e);
+                    }
                 }
             }
         } catch (IOException | ClassNotFoundException e) {
