@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+    <modelVersion>4.0.0</modelVersion>
+
+    <parent>
+        <groupId>mx.itson</groupId>
+        <artifactId>parchis</artifactId>
+        <version>1.0-SNAPSHOT</version>
+    </parent>
+
+    <artifactId>parchis-sala</artifactId>
+    <description>Subsistema Sala real (Hito 2B): estado de la sala, validaciones, perfil en MySQL y la sala compartida por el bus de eventos.</description>
+
+    <dependencies>
+        <dependency>
+            <groupId>mx.itson</groupId>
+            <artifactId>parchis-sala-api</artifactId>
+            <version>${project.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>mx.itson</groupId>
+            <artifactId>parchis-comunicacion-api</artifactId>
+            <version>${project.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>mx.itson</groupId>
+            <artifactId>parchis-perfiles</artifactId>
+            <version>${project.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>mx.itson</groupId>
+            <artifactId>parchis-comunicacion-eventos</artifactId>
+            <version>${project.version}</version>
+            <scope>test</scope>
+        </dependency>
+        <dependency>
+            <groupId>mx.itson</groupId>
+            <artifactId>parchis-sala-api</artifactId>
+            <version>${project.version}</version>
+            <type>test-jar</type>
+            <scope>test</scope>
+        </dependency>
+        <dependency>
+            <groupId>org.junit.jupiter</groupId>
+            <artifactId>junit-jupiter</artifactId>
+            <scope>test</scope>
+        </dependency>
+    </dependencies>
+</project>

@@ -18,6 +18,7 @@
         <module>parchis-comunicacion-eventos</module>
         <module>parchis-datos</module>
         <module>parchis-perfiles</module>
+        <module>parchis-sala</module>
         <module>parchis-presentacion</module>
     </modules>
 
