@@ -1,0 +1,7 @@
+# Copia este archivo como parchis-bd.properties (junto a ejecutar-parchis.bat) y pon tus datos.
+# parchis-bd.properties NO se sube a GitHub (está en .gitignore).
+host=localhost
+puerto=3306
+base=parchis
+usuario=parchis
+contrasena=parchis2b

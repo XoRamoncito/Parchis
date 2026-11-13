@@ -4,3 +4,5 @@ out/
 *.iml
 *.class
 docs/
+# Datos de MySQL de cada computadora: nunca se suben
+parchis-bd.properties
