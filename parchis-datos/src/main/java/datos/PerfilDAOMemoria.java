@@ -26,4 +26,16 @@ public class PerfilDAOMemoria implements IPerfilDAO {
     public Optional<PerfilEntidad> buscarPorNombre(String nombre) {
         return Optional.ofNullable(tabla.get(nombre));
     }
+
+    @Override
+    public void registrarPartida(String nombre, boolean gano) throws PersistenciaException {
+        // PerfilEntidad es inmutable (record): se reemplaza la fila por una con las estadísticas nuevas.
+        // computeIfPresent lo hace de forma atómica, como el UPDATE de MySQL.
+        PerfilEntidad actualizado = tabla.computeIfPresent(nombre, (clave, p) -> new PerfilEntidad(
+                p.nombre(), p.colorPreferido(), p.avatar(),
+                p.partidasJugadas() + 1, p.partidasGanadas() + (gano ? 1 : 0)));
+        if (actualizado == null) {
+            throw new PersistenciaException("No existe el perfil de " + nombre, null);
+        }
+    }
 }

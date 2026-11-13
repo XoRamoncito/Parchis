@@ -17,6 +17,10 @@ public class PerfilDAOMySQL implements IPerfilDAO {
             "INSERT INTO perfil (nombre, color_preferido, avatar) VALUES (?, ?, ?)";
     private static final String BUSCAR =
             "SELECT nombre, color_preferido, avatar, partidas_jugadas, partidas_ganadas FROM perfil WHERE nombre = ?";
+    /** Siempre suma 1 a las jugadas; a las ganadas suma el primer parámetro (1 si ganó, 0 si no). */
+    private static final String REGISTRAR_PARTIDA =
+            "UPDATE perfil SET partidas_jugadas = partidas_jugadas + 1, "
+            + "partidas_ganadas = partidas_ganadas + ? WHERE nombre = ?";
 
     private final ConexionBD conexionBD;
 
@@ -51,6 +55,22 @@ public class PerfilDAOMySQL implements IPerfilDAO {
             }
         } catch (SQLException e) {
             throw new PersistenciaException("No se pudo leer el perfil de " + nombre, e);
+        }
+    }
+
+    @Override
+    public void registrarPartida(String nombre, boolean gano) throws PersistenciaException {
+        int filas;
+        try (Connection conexion = conexionBD.abrir();
+             PreparedStatement sentencia = conexion.prepareStatement(REGISTRAR_PARTIDA)) {
+            sentencia.setInt(1, gano ? 1 : 0);
+            sentencia.setString(2, nombre);
+            filas = sentencia.executeUpdate();
+        } catch (SQLException e) {
+            throw new PersistenciaException("No se pudo registrar la partida de " + nombre, e);
+        }
+        if (filas == 0) {
+            throw new PersistenciaException("No existe el perfil de " + nombre, null);
         }
     }
 }

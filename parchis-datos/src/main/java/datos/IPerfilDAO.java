@@ -10,4 +10,10 @@ public interface IPerfilDAO {
 
     /** El perfil guardado con ese nombre, o vacío si no existe. */
     Optional<PerfilEntidad> buscarPorNombre(String nombre) throws PersistenciaException;
+
+    /**
+     * Suma una partida jugada al perfil y, si la ganó, también una ganada.
+     * Falla si no existe un perfil con ese nombre.
+     */
+    void registrarPartida(String nombre, boolean gano) throws PersistenciaException;
 }

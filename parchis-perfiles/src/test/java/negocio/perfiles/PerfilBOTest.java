@@ -31,6 +31,13 @@ class PerfilBOTest {
         public Optional<PerfilEntidad> buscarPorNombre(String nombre) {
             return Optional.ofNullable(tabla.get(nombre));
         }
+
+        @Override
+        public void registrarPartida(String nombre, boolean gano) {
+            PerfilEntidad p = tabla.get(nombre);
+            tabla.put(nombre, new PerfilEntidad(p.nombre(), p.colorPreferido(), p.avatar(),
+                    p.partidasJugadas() + 1, p.partidasGanadas() + (gano ? 1 : 0)));
+        }
     }
 
     @Test
@@ -62,6 +69,11 @@ class PerfilBOTest {
 
             @Override
             public Optional<PerfilEntidad> buscarPorNombre(String nombre) throws PersistenciaException {
+                throw new PersistenciaException("sin base", null);
+            }
+
+            @Override
+            public void registrarPartida(String nombre, boolean gano) throws PersistenciaException {
                 throw new PersistenciaException("sin base", null);
             }
         };
