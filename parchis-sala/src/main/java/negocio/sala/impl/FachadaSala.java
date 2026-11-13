@@ -134,11 +134,13 @@ public class FachadaSala implements IFachadaSala {
         terminar(evento.getOrigen(), rechazo);
     }
 
-    private String publicar(String tipo, java.io.Serializable datos) {
+    /** Publica la solicitud y devuelve la respuesta pendiente (se guarda antes de enviar, por si el bus responde enseguida). */
+    private CompletableFuture<Optional<SalaException>> publicar(String tipo, java.io.Serializable datos) {
         String id = idAplicacion + "-" + contador.incrementAndGet();
-        pendientes.put(id, new CompletableFuture<>());
+        CompletableFuture<Optional<SalaException>> respuesta = new CompletableFuture<>();
+        pendientes.put(id, respuesta);
         comunicacion.enviar(new MensajeDTO(tipo, id, datos));
-        return id;
+        return respuesta;
     }
 
     /** Si la solicitud era de esta computadora, le responde a quien la está esperando; y avisa a los observadores. */
@@ -155,15 +157,14 @@ public class FachadaSala implements IFachadaSala {
         }
     }
 
-    private void esperar(String id) throws SalaException {
+    private void esperar(CompletableFuture<Optional<SalaException>> respuesta) throws SalaException {
         try {
-            Optional<SalaException> rechazo = pendientes.getOrDefault(id, CompletableFuture.completedFuture(Optional.empty()))
-                    .get(ESPERA_SEGUNDOS, TimeUnit.SECONDS);
+            Optional<SalaException> rechazo = respuesta.get(ESPERA_SEGUNDOS, TimeUnit.SECONDS);
             if (rechazo.isPresent()) {
                 throw rechazo.get();
             }
         } catch (TimeoutException | ExecutionException e) {
-            pendientes.remove(id);
+            pendientes.values().remove(respuesta);
             throw new IllegalStateException("El bus de eventos no respondió. Revisa la conexión.", e);
         } catch (InterruptedException e) {
             Thread.currentThread().interrupt();

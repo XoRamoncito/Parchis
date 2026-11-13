@@ -13,7 +13,7 @@ import java.util.concurrent.CopyOnWriteArrayList;
 
 /**
  * Subsistema Sala simulado: guarda los jugadores en una lista en memoria y
- * lanza las mismas excepciones que lanzará el subsistema real (Liskov):
+ * lanza las mismas excepciones que el subsistema real (Liskov):
  * A1 nombre inválido, A2 color ocupado y A3 sala llena.
  */
 public class FachadaSalaMock implements IFachadaSala {
@@ -26,11 +26,7 @@ public class FachadaSalaMock implements IFachadaSala {
     private final List<ObservadorSala> observadores = new CopyOnWriteArrayList<>();
 
     public FachadaSalaMock() {
-        this("AX7-B9Q");
-    }
-
-    public FachadaSalaMock(String codigo) {
-        this.codigo = codigo;
+        this.codigo = "AX7-B9Q";
     }
 
     @Override

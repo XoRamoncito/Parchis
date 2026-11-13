@@ -66,12 +66,4 @@ public class ControlSala implements ObservadorSala {
             }
         });
     }
-
-    FormRegistro getFormRegistro() {
-        return formRegistro;
-    }
-
-    FormSalaEspera getFormSala() {
-        return formSala;
-    }
 }

@@ -39,7 +39,7 @@ public final class FabricaSubsistemas {
     }
 
     /** Comunicación con el estilo del equipo 3: basado en eventos. */
-    public static IComunicacion crearComunicacion() {
+    private static IComunicacion crearComunicacion() {
         return new BusEventosRed();
     }
 }

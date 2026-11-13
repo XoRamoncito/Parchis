@@ -63,7 +63,6 @@ public class FormSalaEspera extends JFrame {
         for (JComponent c : new JComponent[]{titulo, etiquetaCodigo, lblCodigo, lblCuantos}) {
             c.setAlignmentX(Component.CENTER_ALIGNMENT);
         }
-        lblCuantos.setAlignmentX(Component.CENTER_ALIGNMENT);
         cabecera.add(titulo);
         cabecera.add(Box.createVerticalStrut(4));
         cabecera.add(etiquetaCodigo);
@@ -169,9 +168,5 @@ public class FormSalaEspera extends JFrame {
 
     public void mostrarError(String mensaje) {
         JOptionPane.showMessageDialog(this, mensaje, "Parchís", JOptionPane.WARNING_MESSAGE);
-    }
-
-    void presionarConfirmar() {
-        btnConfirmar.doClick();
     }
 }

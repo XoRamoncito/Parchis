@@ -144,15 +144,4 @@ public class FormRegistro extends JFrame {
             elegirColor(coloresLibres.iterator().next());
         }
     }
-
-    /** Para las pruebas y la demostración: captura los datos como lo haría el jugador. */
-    void capturar(String nombre, ColorJugador color, int avatar) {
-        txtNombre.setText(nombre);
-        elegirColor(color);
-        elegirAvatar(avatar);
-    }
-
-    void presionarRegistrar() {
-        btnRegistrar.doClick();
-    }
 }

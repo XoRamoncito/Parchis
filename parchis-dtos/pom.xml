@@ -12,12 +12,4 @@
 
     <artifactId>parchis-dtos</artifactId>
     <description>Objetos de transferencia (DTOs) entre capas y por la red.</description>
-
-    <dependencies>
-        <dependency>
-            <groupId>org.junit.jupiter</groupId>
-            <artifactId>junit-jupiter</artifactId>
-            <scope>test</scope>
-        </dependency>
-    </dependencies>
 </project>
