@@ -27,7 +27,7 @@ import java.awt.RenderingHints;
  * con su color y si ya están listos, y el botón "Confirmar estado".
  * "Iniciar partida" es de otro caso de uso y aparece deshabilitado.
  */
-public class FormSala extends JFrame {
+public class FormSalaEspera extends JFrame {
 
     private final ControlSala control;
     private final JLabel lblCodigo = new JLabel(" ", SwingConstants.CENTER);
@@ -36,7 +36,7 @@ public class FormSala extends JFrame {
     private final JButton btnConfirmar = Estilo.botonClaro("Confirmar Estado");
     private final JButton btnIniciar = Estilo.botonOscuro("Iniciar Partida");
 
-    public FormSala(ControlSala control) {
+    public FormSalaEspera(ControlSala control) {
         super("Parchís - Sala de espera");
         this.control = control;
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);

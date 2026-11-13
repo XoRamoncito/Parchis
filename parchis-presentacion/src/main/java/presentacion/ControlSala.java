@@ -18,13 +18,13 @@ public class ControlSala implements ObservadorSala {
 
     private final IFachadaSala fachada;
     private final FormRegistro formRegistro;
-    private final FormSala formSala;
+    private final FormSalaEspera formSala;
     private String miNombre;
 
     public ControlSala(IFachadaSala fachada) {
         this.fachada = fachada;
         this.formRegistro = new FormRegistro(this);
-        this.formSala = new FormSala(this);
+        this.formSala = new FormSalaEspera(this);
         fachada.agregarObservador(this);
     }
 
@@ -43,6 +43,8 @@ public class ControlSala implements ObservadorSala {
             formSala.setVisible(true);
         } catch (SalaException e) {
             formRegistro.mostrarError(e.getMessage(), e.getColoresLibres());
+        } catch (IllegalStateException e) {
+            formRegistro.mostrarError(e.getMessage(), java.util.Set.of());
         }
     }
 
@@ -69,7 +71,7 @@ public class ControlSala implements ObservadorSala {
         return formRegistro;
     }
 
-    FormSala getFormSala() {
+    FormSalaEspera getFormSala() {
         return formSala;
     }
 }

@@ -11,17 +11,17 @@
     </parent>
 
     <artifactId>parchis-presentacion</artifactId>
-    <description>Presentación del CU-01 (pantallas y control) con el main y la fábrica.</description>
+    <description>Presentación del CU-01 (pantallas y control) con el main y la fábrica. Solo la fábrica usa las implementaciones.</description>
 
     <dependencies>
         <dependency>
             <groupId>mx.itson</groupId>
-            <artifactId>parchis-sala-api</artifactId>
+            <artifactId>parchis-dtos</artifactId>
             <version>${project.version}</version>
         </dependency>
         <dependency>
             <groupId>mx.itson</groupId>
-            <artifactId>parchis-sala-mock</artifactId>
+            <artifactId>parchis-sala-api</artifactId>
             <version>${project.version}</version>
         </dependency>
         <dependency>
@@ -31,7 +31,22 @@
         </dependency>
         <dependency>
             <groupId>mx.itson</groupId>
+            <artifactId>parchis-sala</artifactId>
+            <version>${project.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>mx.itson</groupId>
             <artifactId>parchis-comunicacion-eventos</artifactId>
+            <version>${project.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>mx.itson</groupId>
+            <artifactId>parchis-perfiles</artifactId>
+            <version>${project.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>mx.itson</groupId>
+            <artifactId>parchis-datos</artifactId>
             <version>${project.version}</version>
         </dependency>
         <dependency>
@@ -40,4 +55,40 @@
             <scope>test</scope>
         </dependency>
     </dependencies>
+
+    <build>
+        <plugins>
+            <!-- La presentación es el componente ejecutable: java -jar con sus dependencias en lib/. -->
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-dependency-plugin</artifactId>
+                <version>3.7.0</version>
+                <executions>
+                    <execution>
+                        <phase>package</phase>
+                        <goals>
+                            <goal>copy-dependencies</goal>
+                        </goals>
+                        <configuration>
+                            <outputDirectory>${project.build.directory}/lib</outputDirectory>
+                            <includeScope>runtime</includeScope>
+                        </configuration>
+                    </execution>
+                </executions>
+            </plugin>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-jar-plugin</artifactId>
+                <configuration>
+                    <archive>
+                        <manifest>
+                            <mainClass>presentacion.AppParchis</mainClass>
+                            <addClasspath>true</addClasspath>
+                            <classpathPrefix>lib/</classpathPrefix>
+                        </manifest>
+                    </archive>
+                </configuration>
+            </plugin>
+        </plugins>
+    </build>
 </project>

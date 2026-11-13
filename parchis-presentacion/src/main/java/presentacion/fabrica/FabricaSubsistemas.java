@@ -1,28 +1,41 @@
 package presentacion.fabrica;
 
+import datos.ConexionBD;
+import datos.PerfilDAOMySQL;
+import datos.PersistenciaException;
 import negocio.comunicacion.IComunicacion;
 import negocio.comunicacion.eventos.BusEventosRed;
+import negocio.comunicacion.eventos.RelevoEventos;
+import negocio.perfiles.PerfilBO;
 import negocio.sala.IFachadaSala;
-import negocio.sala.mock.FachadaSalaMock;
+import negocio.sala.impl.FachadaSala;
+
+import java.io.IOException;
+import java.nio.file.Path;
 
 /**
  * El único lugar que conoce las clases concretas. Las pantallas y el control
- * piden interfaces; cambiar el mock por el subsistema real (Hito 2B) es
- * cambiar USAR_MOCK aquí.
+ * piden interfaces. En el Hito 2B la fábrica ya no crea el mock sino el
+ * subsistema Sala real, con su comunicación por eventos y el perfil en MySQL.
  */
 public final class FabricaSubsistemas {
-
-    /** Hito 2A: los subsistemas de primer nivel son mocks. */
-    public static final boolean USAR_MOCK = true;
 
     private FabricaSubsistemas() {
     }
 
-    public static IFachadaSala crearFachadaSala() {
-        if (USAR_MOCK) {
-            return new FachadaSalaMock();
-        }
-        throw new UnsupportedOperationException("El subsistema Sala real llega en el Hito 2B");
+    /**
+     * Arma el subsistema Sala: se conecta al bus de eventos en hostBus (si es
+     * esta computadora y nadie lo ha abierto, lo abre) y a MySQL con
+     * parchis-bd.properties.
+     */
+    public static IFachadaSala crearFachadaSala(String hostBus) throws IOException, PersistenciaException {
+        ConexionBD baseDeDatos = ConexionBD.desdeArchivo(Path.of(ConexionBD.ARCHIVO));
+        baseDeDatos.probar();
+        PerfilBO perfiles = new PerfilBO(new PerfilDAOMySQL(baseDeDatos));
+        IComunicacion comunicacion = crearComunicacion();
+        FachadaSala sala = new FachadaSala(comunicacion, perfiles);
+        comunicacion.conectar(hostBus, RelevoEventos.PUERTO);
+        return sala;
     }
 
     /** Comunicación con el estilo del equipo 3: basado en eventos. */
