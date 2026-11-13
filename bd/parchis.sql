@@ -1,5 +1,5 @@
 -- Base de datos del Parchís en red (Hito 2B). Se corre una vez en cada computadora
--- (la persistencia es local: cada una guarda los perfiles de quienes juegan en ella).
+-- (cada aplicación guarda en el MySQL de su computadora el perfil de quien juega en ella).
 -- En MySQL Workbench: File > Open SQL Script, y el rayo para ejecutar.
 
 CREATE DATABASE IF NOT EXISTS parchis;
