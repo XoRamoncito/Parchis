@@ -4,4 +4,4 @@ host=localhost
 puerto=3306
 base=parchis
 usuario=parchis
-contrasena=parchis2b
+contrasena=CAMBIA_ESTA_CONTRASENA

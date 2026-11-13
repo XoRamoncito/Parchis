@@ -13,6 +13,7 @@ CREATE TABLE IF NOT EXISTS perfil (
     partidas_ganadas  INT         NOT NULL DEFAULT 0
 );
 
--- Usuario solo para el juego. Cambia la contraseña y ponla igual en parchis-bd.properties.
-CREATE USER IF NOT EXISTS 'parchis'@'localhost' IDENTIFIED BY 'parchis2b';
+-- Usuario solo para el juego. Antes de correrlo, cambia CAMBIA_ESTA_CONTRASENA por tu contraseña
+-- y pon la misma en parchis-bd.properties.
+CREATE USER IF NOT EXISTS 'parchis'@'localhost' IDENTIFIED BY 'CAMBIA_ESTA_CONTRASENA';
 GRANT SELECT, INSERT, UPDATE ON parchis.* TO 'parchis'@'localhost';
